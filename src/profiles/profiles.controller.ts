@@ -20,6 +20,6 @@ export class ProfilesController {
 
   @Get()
   public async findOne(@CurrentUser() currentUser: UserEntity) {
-    return await this.usersService.findById(currentUser.id, ['pictures']);
+    return await this.usersService.findById(currentUser.id);
   }
 }
