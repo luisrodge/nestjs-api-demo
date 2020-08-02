@@ -5,8 +5,10 @@ import {
   BeforeInsert,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { ContactEntity } from '../contacts/contact.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -30,6 +32,12 @@ export class UserEntity {
 
   @Column({ default: true })
   trial: boolean;
+
+  @OneToMany(
+    type => ContactEntity,
+    contact => contact.user,
+  )
+  contacts: ContactEntity[];
 
   async comparePassword(attempt: string): Promise<boolean> {
     return await bcrypt.compare(attempt, this.password);
