@@ -17,7 +17,10 @@ export class ContactsService {
     return await this.contactRepo.findOne({ where: { phoneNumber } });
   }
 
-  async create(values: Record<string, any>): Promise<ContactEntity> {
+  async create(
+    values: Record<string, any>,
+    userId: number,
+  ): Promise<ContactEntity> {
     const dbContact = await this.findByPhoneNumber(values.phoneNumber);
 
     if (dbContact) {
