@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MulterModule } from '@nestjs/platform-express';
 
 import { configService } from './config/config.service';
 import { ContactsModule } from './contacts/contacts.module';
@@ -10,6 +11,9 @@ import { ProfilesModule } from './profiles/profiles.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    MulterModule.register({
+      dest: './files',
+    }),
     AuthModule,
     ContactsModule,
     ProfilesModule,
