@@ -52,8 +52,6 @@ export class ContactsController {
     }),
   )
   async import(@CurrentUser() currentUser: UserEntity, @UploadedFile() file) {
-    console.log(file);
     await this.contactsService.import(file.path);
-    return 'Ok';
   }
 }

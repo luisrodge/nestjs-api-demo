@@ -53,6 +53,9 @@ export class ContactsService {
           phoneNumber: row.Phone,
         };
         await this.create(contact, 1);
+      })
+      .on('end', () => {
+        fs.unlinkSync(filePath);
       });
   }
 }
