@@ -29,12 +29,8 @@ export class ContactsService {
   ): Promise<ContactEntity> {
     const dbContact = await this.findByPhoneNumber(values.phoneNumber);
 
-    if (dbContact) {
-      throw new HttpException(
-        'Contact already exists for that number',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    if (dbContact) return;
+
     const contact: ContactEntity = this.contactRepo.create({
       ...values,
     });
