@@ -23,6 +23,10 @@ export class ContactsService {
     });
   }
 
+  async findByIds(ids: number[]): Promise<ContactEntity[] | undefined> {
+    return await this.contactRepo.findByIds(ids);
+  }
+
   async findByPhoneNumber(
     phoneNumber: string,
   ): Promise<ContactEntity | undefined> {
