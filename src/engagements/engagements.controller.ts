@@ -1,18 +1,12 @@
 import { Post, Body, Get } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 
 import { DtoValidationPipe } from '../core/pipes/dto-validation.pipe';
-import {
-  CreateEngagementDto,
-  UpdateEngagementDto,
-  ResultEngagementDto,
-} from './engagement.dto';
+import { ResultEngagementDto } from './engagement.dto';
 import { ApiController } from '../core/decorators/api-controller.decorator';
 import { EngagementsService } from './engagements.service';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { UserEntity } from '../users/user.entity';
-import { CreateContactDto } from 'src/contacts/contact.dto';
+import { CreateContactDto } from '../contacts/contact.dto';
 
 @ApiController('/api/v1/engagements', ResultEngagementDto)
 export class EngagementsController {

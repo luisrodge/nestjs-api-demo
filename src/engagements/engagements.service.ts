@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import { EngagementEntity } from './engagement.entity';
 import { ContactsService } from '../contacts/contacts.service';
-import { ContactEntity } from 'src/contacts/contact.entity';
+import { ContactEntity } from '../contacts/contact.entity';
 
 @Injectable()
 export class EngagementsService {

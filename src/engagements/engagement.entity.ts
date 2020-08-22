@@ -7,7 +7,7 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { ContactEntity } from 'src/contacts/contact.entity';
+import { ContactEntity } from '../contacts/contact.entity';
 
 @Entity({ name: 'engagements' })
 export class EngagementEntity {
