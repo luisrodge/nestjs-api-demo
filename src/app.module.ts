@@ -7,6 +7,7 @@ import { ContactsModule } from './contacts/contacts.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './core/auth/auth.module';
 import { ProfilesModule } from './profiles/profiles.module';
+import { EngagementsModule } from './engagements/engagements.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ProfilesModule } from './profiles/profiles.module';
     ContactsModule,
     ProfilesModule,
     UsersModule,
+    EngagementsModule,
   ],
 })
 export class AppModule {}
