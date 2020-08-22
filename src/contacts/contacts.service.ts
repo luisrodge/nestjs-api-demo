@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DeleteResult } from 'typeorm';
 import * as fs from 'fs';
 import * as csv from 'fast-csv';
 
@@ -72,5 +72,11 @@ export class ContactsService {
       .on('end', () => {
         fs.unlinkSync(filePath);
       });
+  }
+
+  async delete(
+    id: number | Array<number> | string | Array<string>,
+  ): Promise<DeleteResult> {
+    return await this.contactRepo.delete(id);
   }
 }

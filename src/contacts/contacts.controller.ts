@@ -6,6 +6,7 @@ import {
   UploadedFile,
   Put,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -74,5 +75,10 @@ export class ContactsController {
   )
   async import(@CurrentUser() currentUser: UserEntity, @UploadedFile() file) {
     await this.contactsService.import(file.path);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    return await this.contactsService.delete(id);
   }
 }
