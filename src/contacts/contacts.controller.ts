@@ -1,9 +1,21 @@
-import { Post, Body, Get, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Post,
+  Body,
+  Get,
+  UseInterceptors,
+  UploadedFile,
+  Put,
+  Param,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
 import { DtoValidationPipe } from '../core/pipes/dto-validation.pipe';
-import { CreateContactDto, ResultContactDto } from './contact.dto';
+import {
+  CreateContactDto,
+  UpdateContactDto,
+  ResultContactDto,
+} from './contact.dto';
 import { ApiController } from '../core/decorators/api-controller.decorator';
 import { ContactsService } from './contacts.service';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
@@ -39,6 +51,15 @@ export class ContactsController {
       data,
     );
     return await this.contactsService.create(dto, currentUser.id);
+  }
+
+  @Put(':id')
+  async update(@Body() data: Record<string, any>, @Param('id') id: number) {
+    const dto = await this.dtoValidationPipe.transformToDto(
+      UpdateContactDto,
+      data,
+    );
+    return await this.contactsService.update(dto, id);
   }
 
   @Post('import')

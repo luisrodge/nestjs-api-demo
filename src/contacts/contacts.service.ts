@@ -13,6 +13,16 @@ export class ContactsService {
     private readonly contactRepo: Repository<ContactEntity>,
   ) {}
 
+  async findById(
+    id: number,
+    relations?: string[],
+  ): Promise<ContactEntity | undefined> {
+    return await this.contactRepo.findOne({
+      where: { id },
+      relations,
+    });
+  }
+
   async findByPhoneNumber(
     phoneNumber: string,
   ): Promise<ContactEntity | undefined> {
@@ -36,6 +46,15 @@ export class ContactsService {
     });
 
     return await this.contactRepo.save(contact);
+  }
+
+  async update(
+    values: Record<string, any>,
+    contactId: number,
+  ): Promise<ContactEntity> {
+    await this.contactRepo.update({ id: contactId }, values);
+
+    return await this.findById(contactId);
   }
 
   async import(filePath: string) {

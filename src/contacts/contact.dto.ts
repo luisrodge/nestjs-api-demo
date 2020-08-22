@@ -17,6 +17,7 @@ export abstract class CrudContactDto {
 }
 
 export class CreateContactDto extends CrudContactDto {}
+export class UpdateContactDto extends CrudContactDto {}
 
 export class ResultContactDto {
   @Expose()
