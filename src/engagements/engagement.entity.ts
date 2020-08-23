@@ -15,6 +15,9 @@ export class EngagementEntity {
   id: number;
 
   @Column({ nullable: false })
+  title: string;
+
+  @Column({ nullable: false })
   message: string;
 
   @CreateDateColumn()

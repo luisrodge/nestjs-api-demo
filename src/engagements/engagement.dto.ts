@@ -1,7 +1,12 @@
 import { Type, Expose } from 'class-transformer';
 import { IsNotEmpty, IsOptional } from 'class-validator';
+import { TransformTimestamp } from '../core/decorators/transform-timestamp.decorator';
 
 export abstract class CrudEngagementDto {
+  @IsNotEmpty()
+  @Type(() => String)
+  title: string;
+
   @IsNotEmpty()
   @Type(() => String)
   message: string;
@@ -21,5 +26,13 @@ export class ResultEngagementDto {
 
   @Expose()
   @Type(() => String)
+  readonly title: string;
+
+  @Expose()
+  @Type(() => String)
   readonly message: string;
+
+  @Expose()
+  @TransformTimestamp()
+  readonly createdAt: Date;
 }

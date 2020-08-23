@@ -1,12 +1,11 @@
 import { Post, Body, Get } from '@nestjs/common';
 
 import { DtoValidationPipe } from '../core/pipes/dto-validation.pipe';
-import { ResultEngagementDto } from './engagement.dto';
+import { ResultEngagementDto, CreateEngagementDto } from './engagement.dto';
 import { ApiController } from '../core/decorators/api-controller.decorator';
 import { EngagementsService } from './engagements.service';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { UserEntity } from '../users/user.entity';
-import { CreateContactDto } from '../contacts/contact.dto';
 
 @ApiController('/api/v1/engagements', ResultEngagementDto)
 export class EngagementsController {
@@ -30,7 +29,7 @@ export class EngagementsController {
     @CurrentUser() currentUser: UserEntity,
   ) {
     const dto = await this.dtoValidationPipe.transformToDto(
-      CreateContactDto,
+      CreateEngagementDto,
       data,
     );
     return await this.engagementsService.create(dto);
