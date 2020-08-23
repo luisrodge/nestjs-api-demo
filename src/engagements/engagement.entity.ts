@@ -20,6 +20,9 @@ export class EngagementEntity {
   @Column({ nullable: false })
   message: string;
 
+  @Column({ nullable: false, default: 'In Progress' })
+  status: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

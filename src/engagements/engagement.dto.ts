@@ -33,6 +33,10 @@ export class ResultEngagementDto {
   readonly message: string;
 
   @Expose()
+  @Type(() => String)
+  readonly status: string;
+
+  @Expose()
   @TransformTimestamp()
   readonly createdAt: Date;
 }

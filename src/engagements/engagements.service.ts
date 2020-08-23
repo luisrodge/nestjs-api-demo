@@ -39,7 +39,10 @@ export class EngagementsService {
       contacts = await this.contactsService.findAll();
     }
 
-    const engagement = this.engagementRepo.create({ ...createValues });
+    const engagement = this.engagementRepo.create({
+      ...createValues,
+      status: 'Completed',
+    });
     engagement.contacts = contacts;
 
     return await this.engagementRepo.save(engagement);
