@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { EngagementEntity } from './engagement.entity';
 import { ContactsService } from '../contacts/contacts.service';
 import { ContactEntity } from '../contacts/contact.entity';
+import { SnsService } from '../core/sns/sns.service';
 
 @Injectable()
 export class EngagementsService {
@@ -12,6 +13,7 @@ export class EngagementsService {
     @InjectRepository(EngagementEntity)
     private readonly engagementRepo: Repository<EngagementEntity>,
     private contactsService: ContactsService,
+    private snsService: SnsService,
   ) {}
 
   async findById(
@@ -29,22 +31,30 @@ export class EngagementsService {
   }
 
   async create(values: Record<string, any>): Promise<EngagementEntity> {
-    let contacts: ContactEntity[];
+    try {
+      let contacts: ContactEntity[];
 
-    const { contactIds, ...createValues } = values;
+      const { contactIds, ...createValues } = values;
 
-    if (contactIds) {
-      contacts = await this.contactsService.findByIds(contactIds);
-    } else {
-      contacts = await this.contactsService.findAll();
+      if (contactIds) {
+        contacts = await this.contactsService.findByIds(contactIds);
+      } else {
+        contacts = await this.contactsService.findAll();
+      }
+
+      const engagementValues = this.engagementRepo.create({
+        ...createValues,
+        contacts,
+        status: 'Completed',
+      });
+
+      const engagement = await this.engagementRepo.save(engagementValues);
+
+      await this.snsService.sendSms(engagement.message, ['']);
+
+      return engagement;
+    } catch (error) {
+      throw error;
     }
-
-    const engagement = this.engagementRepo.create({
-      ...createValues,
-      status: 'Completed',
-    });
-    engagement.contacts = contacts;
-
-    return await this.engagementRepo.save(engagement);
   }
 }
