@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 
 import { EngagementEntity } from './engagement.entity';
 import { ContactsService } from '../contacts/contacts.service';
@@ -14,6 +14,7 @@ export class EngagementsService {
     private readonly engagementRepo: Repository<EngagementEntity>,
     private contactsService: ContactsService,
     private snsService: SnsService,
+    private connection: Connection,
   ) {}
 
   async findById(
@@ -31,8 +32,13 @@ export class EngagementsService {
   }
 
   async create(values: Record<string, any>): Promise<EngagementEntity> {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
       let contacts: ContactEntity[];
+      const phoneNumbers: string[] = [];
 
       const { contactIds, ...createValues } = values;
 
@@ -42,19 +48,27 @@ export class EngagementsService {
         contacts = await this.contactsService.findAll();
       }
 
-      const engagementValues = this.engagementRepo.create({
+      for (const contact of contacts) {
+        phoneNumbers.push(contact.phoneNumber);
+      }
+
+      const engagement = this.engagementRepo.create({
         ...createValues,
         contacts,
-        status: 'Completed',
       });
 
-      const engagement = await this.engagementRepo.save(engagementValues);
+      await queryRunner.manager.save(engagement);
 
-      await this.snsService.sendSms(engagement.message, ['']);
+      await this.snsService.sendSms(engagement.message, phoneNumbers);
+
+      await queryRunner.commitTransaction();
 
       return engagement;
     } catch (error) {
+      await queryRunner.rollbackTransaction();
       throw error;
+    } finally {
+      await queryRunner.release();
     }
   }
 }

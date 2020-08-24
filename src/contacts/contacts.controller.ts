@@ -22,7 +22,7 @@ import { ContactsService } from './contacts.service';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { UserEntity } from '../users/user.entity';
 import { ContactEntity } from './contact.entity';
-import { editFileName, csvFileFilter } from '../utils/file-uploading.utils';
+import { editFileName, csvFileFilter } from '../utils/file-uploading';
 
 @ApiController('/api/v1/contacts', ResultContactDto)
 export class ContactsController {
