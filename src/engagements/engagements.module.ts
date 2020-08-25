@@ -9,6 +9,7 @@ import { ContactsModule } from '../contacts/contacts.module';
 import { EngagementsController } from './engagements.controller';
 import { SnsModule } from '../core/sns/sns.module';
 import { BullConfigService } from '../config/bull-config.service';
+import { EngagementProcessor } from './engagement.processor';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { BullConfigService } from '../config/bull-config.service';
     SnsModule,
   ],
   exports: [EngagementsService],
-  providers: [EngagementsService],
+  providers: [EngagementsService, EngagementProcessor],
   controllers: [EngagementsController],
 })
 export class EngagementsModule {}
