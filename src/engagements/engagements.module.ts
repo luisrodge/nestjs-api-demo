@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
-import { ConfigModule } from '@nestjs/config';
-import { ConfigService } from 'aws-sdk';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { EngagementEntity } from './engagement.entity';
 import { EngagementsService } from './engagements.service';

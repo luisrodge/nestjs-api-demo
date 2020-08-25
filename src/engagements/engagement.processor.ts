@@ -6,17 +6,18 @@ import {
   Process,
   Processor,
 } from '@nestjs/bull';
-import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 
 import { SnsService } from '../core/sns/sns.service';
 import { EngagementEntity } from './engagement.entity';
+import { EngagementsService } from './engagements.service';
 
 @Processor('engagement')
 export class EngagementProcessor {
-  private readonly logger = new Logger(EngagementProcessor.name);
-
-  constructor(private snsService: SnsService) {}
+  constructor(
+    private snsService: SnsService,
+    private engagementsService: EngagementsService,
+  ) {}
 
   @Process('sendSms')
   async sendSms(job: Job<{ engagement: EngagementEntity }>) {
@@ -29,6 +30,10 @@ export class EngagementProcessor {
       }
 
       await this.snsService.sendSms(engagement.message, phoneNumbers);
+
+      await this.engagementsService.update(engagement.id, {
+        status: 'Completed',
+      });
     } catch (error) {
       throw error;
     }

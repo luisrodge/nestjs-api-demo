@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 import { Repository, Connection } from 'typeorm';
 
 import { EngagementEntity } from './engagement.entity';
 import { ContactsService } from '../contacts/contacts.service';
 import { ContactEntity } from '../contacts/contact.entity';
 import { SnsService } from '../core/sns/sns.service';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
 
 @Injectable()
 export class EngagementsService {
@@ -15,7 +15,7 @@ export class EngagementsService {
     @InjectRepository(EngagementEntity)
     private readonly engagementRepo: Repository<EngagementEntity>,
     @InjectQueue('engagement')
-    private engagementQueue: Queue,
+    private readonly engagementQueue: Queue,
     private contactsService: ContactsService,
     private snsService: SnsService,
     private connection: Connection,
@@ -60,7 +60,7 @@ export class EngagementsService {
 
       await queryRunner.commitTransaction();
 
-      this.engagementQueue.add('sendSms', { engagement });
+      await this.engagementQueue.add('sendSms', { engagement });
 
       return engagement;
     } catch (error) {
@@ -68,6 +68,19 @@ export class EngagementsService {
       throw error;
     } finally {
       await queryRunner.release();
+    }
+  }
+
+  async update(
+    id: number,
+    values: Record<string, any>,
+  ): Promise<EngagementEntity> {
+    try {
+      await this.engagementRepo.update({ id }, values);
+
+      return await this.findById(id);
+    } catch (error) {
+      throw error;
     }
   }
 }
