@@ -6,12 +6,16 @@ import { EngagementEntity } from './engagement.entity';
 import { ContactsService } from '../contacts/contacts.service';
 import { ContactEntity } from '../contacts/contact.entity';
 import { SnsService } from '../core/sns/sns.service';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Injectable()
 export class EngagementsService {
   constructor(
     @InjectRepository(EngagementEntity)
     private readonly engagementRepo: Repository<EngagementEntity>,
+    @InjectQueue('engagement')
+    private engagementQueue: Queue,
     private contactsService: ContactsService,
     private snsService: SnsService,
     private connection: Connection,
@@ -38,7 +42,6 @@ export class EngagementsService {
 
     try {
       let contacts: ContactEntity[];
-      const phoneNumbers: string[] = [];
 
       const { contactIds, ...createValues } = values;
 
@@ -48,10 +51,6 @@ export class EngagementsService {
         contacts = await this.contactsService.findAll();
       }
 
-      for (const contact of contacts) {
-        phoneNumbers.push(contact.phoneNumber);
-      }
-
       const engagement = this.engagementRepo.create({
         ...createValues,
         contacts,
@@ -59,9 +58,9 @@ export class EngagementsService {
 
       await queryRunner.manager.save(engagement);
 
-      await this.snsService.sendSms(engagement.message, phoneNumbers);
-
       await queryRunner.commitTransaction();
+
+      this.engagementQueue.add('sendSms', { engagement });
 
       return engagement;
     } catch (error) {
