@@ -21,8 +21,9 @@ export class EngagementProcessor {
 
   @Process('sendSms')
   async sendSms(job: Job<{ engagement: EngagementEntity }>) {
+    const { engagement } = job.data;
+
     try {
-      const { engagement } = job.data;
       const phoneNumbers: string[] = [];
 
       for (const contact of engagement.contacts) {
@@ -52,9 +53,15 @@ export class EngagementProcessor {
   }
 
   @OnQueueFailed()
-  onFailed(job: Job, err: Error) {
+  async onFailed(job: Job<{ engagement: EngagementEntity }>, err: Error) {
     console.log(`Processing job ${job.id} of type ${job.name} failed`);
     console.log(err);
+
+    const { engagement } = job.data;
+
+    await this.engagementsService.update(engagement.id, {
+      status: 'Failed',
+    });
   }
 
   @OnQueueCompleted()

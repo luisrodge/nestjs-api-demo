@@ -60,7 +60,11 @@ export class EngagementsService {
 
       await queryRunner.commitTransaction();
 
-      await this.engagementQueue.add('sendSms', { engagement });
+      await this.engagementQueue.add(
+        'sendSms',
+        { engagement },
+        { attempts: 2, backoff: 10000 },
+      );
 
       return engagement;
     } catch (error) {
