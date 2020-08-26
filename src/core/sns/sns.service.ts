@@ -21,13 +21,19 @@ export class SnsService {
 
   async sendSms(message: string, phoneNumbers: string[]) {
     try {
+      const smsParams: SNS.Types.SetSMSAttributesInput = {
+        attributes: { DefaultSenderID: 'rodgeTech' },
+      };
+      await this.sns.setSMSAttributes(smsParams).promise();
+
       for (const phoneNumber of phoneNumbers) {
         const formattedPhoneNumber = formatForPublish(phoneNumber);
-        const params = {
+        const messageParams = {
           Message: message,
           PhoneNumber: formattedPhoneNumber,
         };
-        await this.sns.publish(params).promise();
+
+        await this.sns.publish(messageParams).promise();
       }
     } catch (error) {
       throw error;
