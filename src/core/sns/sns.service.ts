@@ -28,7 +28,7 @@ export class SnsService {
 
       for (const phoneNumber of phoneNumbers) {
         const formattedPhoneNumber = formatForPublish(phoneNumber);
-        const messageParams = {
+        const messageParams: SNS.PublishInput = {
           Message: message,
           PhoneNumber: formattedPhoneNumber,
         };
