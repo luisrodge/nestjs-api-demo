@@ -6,9 +6,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToOne,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { ContactEntity } from '../contacts/contact.entity';
+import { BusinessEntity } from 'src/businesses/business.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -38,6 +40,12 @@ export class UserEntity {
     contact => contact.user,
   )
   contacts: ContactEntity[];
+
+  @ManyToOne(
+    type => BusinessEntity,
+    business => business.users,
+  )
+  business: BusinessEntity;
 
   async comparePassword(attempt: string): Promise<boolean> {
     return await bcrypt.compare(attempt, this.password);
