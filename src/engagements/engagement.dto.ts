@@ -1,6 +1,11 @@
 import { Type, Expose } from 'class-transformer';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, Length } from 'class-validator';
+
 import { TransformTimestamp } from '../core/decorators/transform-timestamp.decorator';
+import {
+  MIN_SNS_MESSAGE_LENGTH,
+  MAX_SNS_MESSAGE_LENGTH,
+} from '../shared/constants';
 
 export abstract class CrudEngagementDto {
   @IsNotEmpty()
@@ -8,6 +13,7 @@ export abstract class CrudEngagementDto {
   title: string;
 
   @IsNotEmpty()
+  @Length(MIN_SNS_MESSAGE_LENGTH, MAX_SNS_MESSAGE_LENGTH)
   @Type(() => String)
   message: string;
 

@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { SNS } from 'aws-sdk';
 
 import { formatForPublish } from '../../utils/phone-number';
+import { DEFAULT_AWS_REGION } from '../../shared/constants';
 
 const ACCESS_ENV_KEY_VARIABLE = 'ACCESS_KEY_ID';
 const SECRET_ENV_KEY_VARIABLE = 'SECRET_ACCESS_KEY';
@@ -16,7 +17,11 @@ export class SnsService {
     const secretAccessKey = this.configService.get<string>(
       SECRET_ENV_KEY_VARIABLE,
     );
-    this.sns = new SNS({ accessKeyId, secretAccessKey, region: 'us-east-1' });
+    this.sns = new SNS({
+      accessKeyId,
+      secretAccessKey,
+      region: DEFAULT_AWS_REGION,
+    });
   }
 
   async sendSms(message: string, phoneNumbers: string[]) {
