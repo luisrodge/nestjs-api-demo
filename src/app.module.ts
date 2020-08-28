@@ -10,6 +10,7 @@ import { AuthModule } from './core/auth/auth.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { EngagementsModule } from './engagements/engagements.module';
 import { SnsModule } from './core/sns/sns.module';
+import { BusinessesModule } from './businesses/businesses.module';
 
 @Module({
   imports: [
@@ -19,11 +20,12 @@ import { SnsModule } from './core/sns/sns.module';
       dest: './files',
     }),
     AuthModule,
+    BusinessesModule,
     ContactsModule,
-    ProfilesModule,
-    UsersModule,
     EngagementsModule,
+    ProfilesModule,
     SnsModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
