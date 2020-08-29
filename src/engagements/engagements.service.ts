@@ -54,6 +54,7 @@ export class EngagementsService {
 
       const engagement = this.engagementRepo.create({
         ...createValues,
+        businessId,
         contacts,
       });
 

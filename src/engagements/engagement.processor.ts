@@ -11,12 +11,14 @@ import { Job } from 'bull';
 import { SnsService } from '../core/sns/sns.service';
 import { EngagementEntity } from './engagement.entity';
 import { EngagementsService } from './engagements.service';
+import { BusinessesService } from '../businesses/businesses.service';
 
 @Processor('engagement')
 export class EngagementProcessor {
   constructor(
-    private snsService: SnsService,
+    private businessesService: BusinessesService,
     private engagementsService: EngagementsService,
+    private snsService: SnsService,
   ) {}
 
   @Process('sendSms')
@@ -26,11 +28,19 @@ export class EngagementProcessor {
     try {
       const phoneNumbers: string[] = [];
 
+      const business = await this.businessesService.findById(
+        engagement.businessId,
+      );
+
       for (const contact of engagement.contacts) {
         phoneNumbers.push(contact.phoneNumber);
       }
 
-      await this.snsService.sendSms(engagement.message, phoneNumbers);
+      await this.snsService.sendSms(
+        business.businessId,
+        engagement.message,
+        phoneNumbers,
+      );
 
       await this.engagementsService.update(engagement.id, {
         status: 'Completed',

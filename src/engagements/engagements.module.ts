@@ -10,6 +10,7 @@ import { EngagementsController } from './engagements.controller';
 import { SnsModule } from '../core/sns/sns.module';
 import { BullConfigService } from '../config/bull-config.service';
 import { EngagementProcessor } from './engagement.processor';
+import { BusinessesModule } from '../businesses/businesses.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { EngagementProcessor } from './engagement.processor';
       inject: [ConfigService],
       useClass: BullConfigService,
     }),
+    BusinessesModule,
     ContactsModule,
     SnsModule,
   ],
