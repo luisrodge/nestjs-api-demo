@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
+  ManyToOne,
 } from 'typeorm';
 import { ContactEntity } from '../contacts/contact.entity';
+import { BusinessEntity } from '../businesses/business.entity';
 
 @Entity({ name: 'engagements' })
 export class EngagementEntity {
@@ -42,4 +44,13 @@ export class EngagementEntity {
     },
   })
   contacts: ContactEntity[];
+
+  @Column({ nullable: false })
+  businessId: number;
+
+  @ManyToOne(
+    type => BusinessEntity,
+    business => business.engagements,
+  )
+  business: BusinessEntity;
 }

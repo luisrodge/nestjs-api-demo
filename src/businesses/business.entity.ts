@@ -9,6 +9,7 @@ import {
 
 import { UserEntity } from '../users/user.entity';
 import { ContactEntity } from '../contacts/contact.entity';
+import { EngagementEntity } from '../engagements/engagement.entity';
 
 @Entity({ name: 'businesses' })
 export class BusinessEntity {
@@ -47,4 +48,10 @@ export class BusinessEntity {
     contact => contact.business,
   )
   contacts: ContactEntity[];
+
+  @OneToMany(
+    type => EngagementEntity,
+    engagement => engagement.business,
+  )
+  engagements: EngagementEntity[];
 }

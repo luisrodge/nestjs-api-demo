@@ -54,15 +54,6 @@ export class ContactsController {
     return await this.contactsService.create(dto, currentUser.businessId);
   }
 
-  @Put(':id')
-  async update(@Body() data: Record<string, any>, @Param('id') id: number) {
-    const dto = await this.dtoValidationPipe.transformToDto(
-      UpdateContactDto,
-      data,
-    );
-    return await this.contactsService.update(dto, id);
-  }
-
   @Post('import')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -75,6 +66,15 @@ export class ContactsController {
   )
   async import(@CurrentUser() currentUser: UserEntity, @UploadedFile() file) {
     await this.contactsService.import(file.path, currentUser.businessId);
+  }
+
+  @Put(':id')
+  async update(@Body() data: Record<string, any>, @Param('id') id: number) {
+    const dto = await this.dtoValidationPipe.transformToDto(
+      UpdateContactDto,
+      data,
+    );
+    return await this.contactsService.update(dto, id);
   }
 
   @Delete(':id')
