@@ -5,7 +5,7 @@ import { TransformTimestamp } from '../core/decorators/transform-timestamp.decor
 import {
   MIN_SNS_MESSAGE_LENGTH,
   MAX_SNS_MESSAGE_LENGTH,
-} from '../shared/constants';
+} from '../utils/constants';
 
 export abstract class CrudEngagementDto {
   @IsNotEmpty()
