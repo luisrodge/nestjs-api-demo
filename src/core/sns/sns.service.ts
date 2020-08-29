@@ -24,10 +24,10 @@ export class SnsService {
     });
   }
 
-  async sendSms(message: string, phoneNumbers: string[]) {
+  async sendSms(businessId: string, message: string, phoneNumbers: string[]) {
     try {
       const smsParams: SNS.Types.SetSMSAttributesInput = {
-        attributes: { DefaultSenderID: 'rodgeTech' },
+        attributes: { DefaultSenderID: businessId },
       };
       await this.sns.setSMSAttributes(smsParams).promise();
 

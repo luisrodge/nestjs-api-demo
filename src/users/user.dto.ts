@@ -30,8 +30,4 @@ export class ResultUserDto {
   @Expose()
   @Type(() => String)
   readonly email: string;
-
-  @Expose()
-  @Type(() => Boolean)
-  readonly trial: boolean;
 }

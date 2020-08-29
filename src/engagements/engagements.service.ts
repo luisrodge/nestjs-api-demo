@@ -7,7 +7,6 @@ import { Repository, Connection } from 'typeorm';
 import { EngagementEntity } from './engagement.entity';
 import { ContactsService } from '../contacts/contacts.service';
 import { ContactEntity } from '../contacts/contact.entity';
-import { SnsService } from '../core/sns/sns.service';
 
 @Injectable()
 export class EngagementsService {
@@ -17,7 +16,6 @@ export class EngagementsService {
     @InjectQueue('engagement')
     private readonly engagementQueue: Queue,
     private contactsService: ContactsService,
-    private snsService: SnsService,
     private connection: Connection,
   ) {}
 
@@ -35,7 +33,10 @@ export class EngagementsService {
     return await this.engagementRepo.find({ order: { createdAt: 'DESC' } });
   }
 
-  async create(values: Record<string, any>): Promise<EngagementEntity> {
+  async create(
+    values: Record<string, any>,
+    businessId: number,
+  ): Promise<EngagementEntity> {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -48,11 +49,12 @@ export class EngagementsService {
       if (contactIds) {
         contacts = await this.contactsService.findByIds(contactIds);
       } else {
-        contacts = await this.contactsService.findAll();
+        contacts = await this.contactsService.findAll(businessId);
       }
 
       const engagement = this.engagementRepo.create({
         ...createValues,
+        businessId,
         contacts,
       });
 

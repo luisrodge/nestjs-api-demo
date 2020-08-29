@@ -39,28 +39,19 @@ export class ContactsController {
   async findAll(
     @CurrentUser() currentUser: UserEntity,
   ): Promise<Array<ContactEntity>> {
-    return await this.contactsService.findAll();
+    return await this.contactsService.findAll(currentUser.businessId);
   }
 
   @Post()
   async create(
-    @Body() data: Record<string, any>,
     @CurrentUser() currentUser: UserEntity,
+    @Body() data: Record<string, any>,
   ) {
     const dto = await this.dtoValidationPipe.transformToDto(
       CreateContactDto,
       data,
     );
-    return await this.contactsService.create(dto, currentUser.id);
-  }
-
-  @Put(':id')
-  async update(@Body() data: Record<string, any>, @Param('id') id: number) {
-    const dto = await this.dtoValidationPipe.transformToDto(
-      UpdateContactDto,
-      data,
-    );
-    return await this.contactsService.update(dto, id);
+    return await this.contactsService.create(dto, currentUser.businessId);
   }
 
   @Post('import')
@@ -74,7 +65,16 @@ export class ContactsController {
     }),
   )
   async import(@CurrentUser() currentUser: UserEntity, @UploadedFile() file) {
-    await this.contactsService.import(file.path);
+    await this.contactsService.import(file.path, currentUser.businessId);
+  }
+
+  @Put(':id')
+  async update(@Body() data: Record<string, any>, @Param('id') id: number) {
+    const dto = await this.dtoValidationPipe.transformToDto(
+      UpdateContactDto,
+      data,
+    );
+    return await this.contactsService.update(dto, id);
   }
 
   @Delete(':id')
