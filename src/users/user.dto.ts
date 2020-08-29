@@ -1,6 +1,5 @@
 import { Type, Expose } from 'class-transformer';
 import { IsNotEmpty, IsEmail } from 'class-validator';
-import { PartialResultBusinessDto } from '../businesses/business.dto';
 
 export abstract class CrudUserDto {
   @IsNotEmpty()
@@ -31,8 +30,4 @@ export class ResultUserDto {
   @Expose()
   @Type(() => String)
   readonly email: string;
-
-  @Expose()
-  @Type(() => PartialResultBusinessDto)
-  readonly business: PartialResultBusinessDto;
 }

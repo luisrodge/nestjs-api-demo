@@ -1,6 +1,6 @@
 import { Type, Expose } from 'class-transformer';
 
-export class PartialResultBusinessDto {
+export class ResultBusinessDto {
   @Expose()
   @Type(() => String)
   readonly name: string;
