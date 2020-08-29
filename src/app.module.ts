@@ -11,6 +11,7 @@ import { ProfilesModule } from './profiles/profiles.module';
 import { EngagementsModule } from './engagements/engagements.module';
 import { SnsModule } from './core/sns/sns.module';
 import { BusinessesModule } from './businesses/businesses.module';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { BusinessesModule } from './businesses/businesses.module';
     ProfilesModule,
     SnsModule,
     UsersModule,
+    SubscriptionsModule,
   ],
 })
 export class AppModule {}

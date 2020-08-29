@@ -5,11 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToOne,
 } from 'typeorm';
 
 import { UserEntity } from '../users/user.entity';
 import { ContactEntity } from '../contacts/contact.entity';
 import { EngagementEntity } from '../engagements/engagement.entity';
+import { SubscriptionEntity } from 'src/subscriptions/subscription.entity';
 
 @Entity({ name: 'businesses' })
 export class BusinessEntity {
@@ -54,4 +56,10 @@ export class BusinessEntity {
     engagement => engagement.business,
   )
   engagements: EngagementEntity[];
+
+  @ManyToOne(
+    type => SubscriptionEntity,
+    subscription => subscription.businesses,
+  )
+  subscription: SubscriptionEntity;
 }
