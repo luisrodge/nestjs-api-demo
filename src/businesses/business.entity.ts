@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { UserEntity } from '../users/user.entity';
+import { ContactEntity } from '../contacts/contact.entity';
 
 @Entity({ name: 'businesses' })
 export class BusinessEntity {
@@ -20,13 +21,13 @@ export class BusinessEntity {
   @Column({ nullable: false, unique: true })
   businessId: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   address: string;
 
-  @Column()
+  @Column({ nullable: true })
   phoneNumber: string;
 
   @CreateDateColumn()
@@ -40,4 +41,10 @@ export class BusinessEntity {
     user => user.business,
   )
   users: UserEntity[];
+
+  @OneToMany(
+    type => ContactEntity,
+    contact => contact.business,
+  )
+  contacts: ContactEntity[];
 }

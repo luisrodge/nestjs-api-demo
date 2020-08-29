@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { UserEntity } from '../users/user.entity';
+import { BusinessEntity } from '../businesses/business.entity';
 
 @Entity({ name: 'contacts' })
 export class ContactEntity {
@@ -28,9 +28,12 @@ export class ContactEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Column({ nullable: false })
+  businessId: number;
+
   @ManyToOne(
-    type => UserEntity,
-    user => user.contacts,
+    type => BusinessEntity,
+    business => business.contacts,
   )
-  user: UserEntity;
+  business: BusinessEntity;
 }

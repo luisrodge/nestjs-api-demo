@@ -5,12 +5,10 @@ import {
   BeforeInsert,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   ManyToOne,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { ContactEntity } from '../contacts/contact.entity';
-import { BusinessEntity } from 'src/businesses/business.entity';
+import { BusinessEntity } from '../businesses/business.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -35,11 +33,8 @@ export class UserEntity {
   @Column({ default: true })
   trial: boolean;
 
-  @OneToMany(
-    type => ContactEntity,
-    contact => contact.user,
-  )
-  contacts: ContactEntity[];
+  @Column({ nullable: false })
+  businessId: number;
 
   @ManyToOne(
     type => BusinessEntity,

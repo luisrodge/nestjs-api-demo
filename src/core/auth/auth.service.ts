@@ -27,7 +27,11 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      businessId: user.businessId,
+    };
     const { id, name, email } = await this.usersService.findByEmail(user.email);
 
     return {
@@ -37,8 +41,10 @@ export class AuthService {
   }
 
   async register(values: Record<string, any>) {
-    const { id, name, email } = await this.usersService.create(values);
-    const payload = { email: email, sub: id };
+    const { id, name, email, businessId } = await this.usersService.create(
+      values,
+    );
+    const payload = { email: email, sub: id, businessId };
 
     return {
       token: this.jwtService.sign(payload),

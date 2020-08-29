@@ -39,19 +39,19 @@ export class ContactsController {
   async findAll(
     @CurrentUser() currentUser: UserEntity,
   ): Promise<Array<ContactEntity>> {
-    return await this.contactsService.findAll();
+    return await this.contactsService.findAll(currentUser.businessId);
   }
 
   @Post()
   async create(
-    @Body() data: Record<string, any>,
     @CurrentUser() currentUser: UserEntity,
+    @Body() data: Record<string, any>,
   ) {
     const dto = await this.dtoValidationPipe.transformToDto(
       CreateContactDto,
       data,
     );
-    return await this.contactsService.create(dto, currentUser.id);
+    return await this.contactsService.create(dto, currentUser.businessId);
   }
 
   @Put(':id')
@@ -74,7 +74,7 @@ export class ContactsController {
     }),
   )
   async import(@CurrentUser() currentUser: UserEntity, @UploadedFile() file) {
-    await this.contactsService.import(file.path);
+    await this.contactsService.import(file.path, currentUser.businessId);
   }
 
   @Delete(':id')

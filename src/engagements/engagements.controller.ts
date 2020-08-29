@@ -32,6 +32,6 @@ export class EngagementsController {
       CreateEngagementDto,
       data,
     );
-    return await this.engagementsService.create(dto);
+    return await this.engagementsService.create(dto, currentUser.businessId);
   }
 }

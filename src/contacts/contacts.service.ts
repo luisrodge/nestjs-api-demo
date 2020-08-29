@@ -33,20 +33,24 @@ export class ContactsService {
     return await this.contactRepo.findOne({ where: { phoneNumber } });
   }
 
-  async findAll(): Promise<ContactEntity[]> {
-    return await this.contactRepo.find({ order: { createdAt: 'DESC' } });
+  async findAll(businessId: number): Promise<ContactEntity[]> {
+    return await this.contactRepo.find({
+      where: { businessId },
+      order: { createdAt: 'DESC' },
+    });
   }
 
   async create(
     values: Record<string, any>,
-    userId: number,
+    businessId: number,
   ): Promise<ContactEntity> {
     const dbContact = await this.findByPhoneNumber(values.phoneNumber);
 
     if (dbContact) return;
 
-    const contact: ContactEntity = this.contactRepo.create({
+    const contact = this.contactRepo.create({
       ...values,
+      businessId,
     });
 
     return await this.contactRepo.save(contact);
@@ -61,7 +65,7 @@ export class ContactsService {
     return await this.findById(contactId);
   }
 
-  async import(filePath: string) {
+  async import(filePath: string, businessId: number) {
     fs.createReadStream(filePath)
       .pipe(csv.parse({ headers: true }))
       .on('error', error => console.error(error))
@@ -71,7 +75,7 @@ export class ContactsService {
           email: row.Email,
           phoneNumber: row.Phone,
         };
-        await this.create(contact, 1);
+        await this.create(contact, businessId);
       })
       .on('end', () => {
         fs.unlinkSync(filePath);
