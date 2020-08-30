@@ -71,7 +71,6 @@ export class EngagementsService {
       return engagement;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw error;
     } finally {
       await queryRunner.release();
     }

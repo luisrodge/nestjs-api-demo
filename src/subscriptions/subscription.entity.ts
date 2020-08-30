@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { BusinessEntity } from 'src/businesses/business.entity';
+import { BusinessEntity } from '../businesses/business.entity';
 
 @Entity({ name: 'subscriptions' })
 export class SubscriptionEntity {
