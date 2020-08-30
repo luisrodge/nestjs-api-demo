@@ -20,4 +20,18 @@ export class BusinessesService {
       relations,
     });
   }
+
+  async remainingCredits(id: number): Promise<number> {
+    const business = await this.businessRepo.findOne({
+      where: { id },
+      relations: ['subscription'],
+    });
+
+    const credits =
+      business.subscription.credits +
+      business.rolloverCredits -
+      business.spentCredits;
+
+    return credits;
+  }
 }

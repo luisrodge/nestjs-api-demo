@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
@@ -6,7 +6,7 @@ import { Repository, Connection } from 'typeorm';
 
 import { EngagementEntity } from './engagement.entity';
 import { ContactsService } from '../contacts/contacts.service';
-import { ContactEntity } from '../contacts/contact.entity';
+import { BusinessesService } from '../businesses/businesses.service';
 
 @Injectable()
 export class EngagementsService {
@@ -16,6 +16,7 @@ export class EngagementsService {
     @InjectQueue('engagement')
     private readonly engagementQueue: Queue,
     private contactsService: ContactsService,
+    private businessesService: BusinessesService,
     private connection: Connection,
   ) {}
 
@@ -42,14 +43,20 @@ export class EngagementsService {
     await queryRunner.startTransaction();
 
     try {
-      let contacts: ContactEntity[];
-
       const { contactIds, ...createValues } = values;
 
-      if (contactIds) {
-        contacts = await this.contactsService.findByIds(contactIds);
-      } else {
-        contacts = await this.contactsService.findAll(businessId);
+      const contacts = await (contactIds
+        ? this.contactsService.findByIds(contactIds)
+        : this.contactsService.findAll(businessId));
+
+      const remainingCredits = await this.businessesService.remainingCredits(
+        businessId,
+      );
+
+      if (remainingCredits <= 0) {
+        throw new BadRequestException('Zero remaining credits');
+      } else if (contacts.length > remainingCredits) {
+        throw new BadRequestException('Not enough credits');
       }
 
       const engagement = this.engagementRepo.create({
