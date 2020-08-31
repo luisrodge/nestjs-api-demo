@@ -22,16 +22,16 @@ export class BusinessesService {
   }
 
   async remainingCredits(id: number): Promise<number> {
-    const business = await this.businessRepo.findOne({
-      where: { id },
-      relations: ['subscription'],
-    });
+    // const business = await this.businessRepo.findOne({
+    //   where: { id },
+    //   relations: ['subscription'],
+    // });
 
-    const credits =
-      business.subscription.credits +
-      business.rolloverCredits -
-      business.spentCredits;
+    // const credits =
+    //   business.subscription.credits +
+    //   business.rolloverCredits -
+    //   business.spentCredits;
 
-    return credits;
+    return 0;
   }
 }

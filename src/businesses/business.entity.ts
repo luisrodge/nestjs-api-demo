@@ -5,13 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  ManyToOne,
 } from 'typeorm';
 
 import { UserEntity } from '../users/user.entity';
 import { ContactEntity } from '../contacts/contact.entity';
 import { EngagementEntity } from '../engagements/engagement.entity';
-import { SubscriptionEntity } from '../subscriptions/subscription.entity';
 import { PurchaseEntity } from '../purchases/purchase.entity';
 
 @Entity({ name: 'businesses' })
@@ -33,12 +31,6 @@ export class BusinessEntity {
 
   @Column({ nullable: true })
   phoneNumber: string;
-
-  @Column({ nullable: false, default: 0 })
-  rolloverCredits: number;
-
-  @Column({ nullable: false, default: 0 })
-  spentCredits: number;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -63,12 +55,6 @@ export class BusinessEntity {
     engagement => engagement.business,
   )
   engagements: EngagementEntity[];
-
-  @ManyToOne(
-    type => SubscriptionEntity,
-    subscription => subscription.businesses,
-  )
-  subscription: SubscriptionEntity;
 
   @OneToMany(
     type => PurchaseEntity,
