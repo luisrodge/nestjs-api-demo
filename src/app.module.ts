@@ -13,6 +13,7 @@ import { SnsModule } from './core/sns/sns.module';
 import { BusinessesModule } from './businesses/businesses.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { BundlesModule } from './bundles/bundles.module';
+import { PurchasesModule } from './purchases/purchases.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { BundlesModule } from './bundles/bundles.module';
     UsersModule,
     SubscriptionsModule,
     BundlesModule,
+    PurchasesModule,
   ],
 })
 export class AppModule {}

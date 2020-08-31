@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { PurchaseEntity } from '../purchases/purchase.entity';
 
 @Entity({ name: 'bundles' })
 export class BundleEntity {
@@ -22,4 +24,10 @@ export class BundleEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(
+    type => PurchaseEntity,
+    purchase => purchase.bundle,
+  )
+  purchases: PurchaseEntity[];
 }
