@@ -27,9 +27,6 @@ export class PurchaseEntity {
   bundle: BundleEntity;
 
   @Column({ nullable: false, default: 0 })
-  rolloverCredits: number;
-
-  @Column({ nullable: false, default: 0 })
   spentCredits: number;
 
   @CreateDateColumn()

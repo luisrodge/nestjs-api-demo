@@ -5,7 +5,7 @@ export class InitialPurchases1598846759696 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "purchases" ("id" SERIAL NOT NULL, "rolloverCredits" integer NOT NULL DEFAULT 0, "spentCredits" integer NOT NULL DEFAULT 0, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "businessId" integer, "bundleId" integer, CONSTRAINT "PK_1d55032f37a34c6eceacbbca6b8" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "purchases" ("id" SERIAL NOT NULL, "spentCredits" integer NOT NULL DEFAULT 0, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "businessId" integer, "bundleId" integer, CONSTRAINT "PK_1d55032f37a34c6eceacbbca6b8" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `ALTER TABLE "purchases" ADD CONSTRAINT "FK_c926ef94bc1571674f2bfa62cba" FOREIGN KEY ("businessId") REFERENCES "businesses"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,

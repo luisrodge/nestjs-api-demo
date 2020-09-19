@@ -21,6 +21,18 @@ export class BusinessesService {
     });
   }
 
+  async bundles(
+    id: number,
+    relations?: string[],
+  ): Promise<BusinessEntity | undefined> {
+    const bundles = await this.businessRepo
+      .createQueryBuilder('question')
+      .leftJoinAndSelect('question.categories', 'category')
+      .getMany();
+
+    return bundles;
+  }
+
   async remainingCredits(id: number): Promise<number> {
     // const business = await this.businessRepo.findOne({
     //   where: { id },
