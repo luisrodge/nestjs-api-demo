@@ -1,7 +1,7 @@
 import { Type, Expose } from 'class-transformer';
 
 import { ResultBundleDto } from '../bundles/bundle.dto';
-import { TransformDate } from '../core/decorators/transform-date.decorator ';
+import { TransformHumanDate } from '../core/decorators/transform-date.decorator ';
 
 export class ResultPurchaseDto {
   @Expose()
@@ -13,8 +13,8 @@ export class ResultPurchaseDto {
   readonly spentCredits: number;
 
   @Expose()
-  @TransformDate()
-  readonly expiresAt: number;
+  @TransformHumanDate()
+  readonly expiresAt: Date;
 
   @Expose()
   @Type(() => ResultBundleDto)

@@ -6,7 +6,7 @@ import { UserEntity } from '../users/user.entity';
 import { ResultPurchaseDto } from './purchase.dto';
 import { PurchasesService } from './purchases.service';
 
-@ApiController('/api/v1/business/purchases', ResultPurchaseDto)
+@ApiController('/api/v1/purchases', ResultPurchaseDto)
 export class PurchasesController {
   constructor(private purchasesService: PurchasesService) {}
 
