@@ -46,12 +46,14 @@ export class PurchasesService {
     return await this.findById(purchase.id, ['bundle']);
   }
 
-  async delete(id: number): Promise<DeleteResult> {
+  async delete(id: number): Promise<PurchaseEntity> {
     const purchase = await this.findById(id);
 
     if (purchase.spentCredits != 0)
       throw new BadRequestException('Unable to cancel purchase. Credits used.');
 
-    return await this.purchaseRepo.delete(id);
+    await this.purchaseRepo.delete(id);
+
+    return purchase;
   }
 }
