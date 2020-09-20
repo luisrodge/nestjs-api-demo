@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BusinessEntity } from '../businesses/business.entity';
 import { Repository } from 'typeorm';
 
 import { BundleEntity } from './bundle.entity';
@@ -11,13 +12,15 @@ export class BundlesService {
     private readonly bundleRepo: Repository<BundleEntity>,
   ) {}
 
-  async findBusinessBundles(
+  async findPurchasedBundles(
     businessId: number,
   ): Promise<BundleEntity[] | undefined> {
     const bundles = await this.bundleRepo
       .createQueryBuilder('bundle')
-      .leftJoin('bundle.businesses', 'business')
-      .where('business.id = :businessId', { businessId })
+      .innerJoin('bundle.purchases', 'purchase')
+      .innerJoin('purchase.business', 'business', 'business.id = :businessId', {
+        businessId,
+      })
       .getMany();
 
     return bundles;

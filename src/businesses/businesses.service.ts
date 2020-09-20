@@ -24,7 +24,7 @@ export class BusinessesService {
   async bundles(
     id: number,
     relations?: string[],
-  ): Promise<BusinessEntity | undefined> {
+  ): Promise<BusinessEntity[] | undefined> {
     const bundles = await this.businessRepo
       .createQueryBuilder('question')
       .leftJoinAndSelect('question.categories', 'category')
@@ -44,6 +44,6 @@ export class BusinessesService {
     //   business.rolloverCredits -
     //   business.spentCredits;
 
-    return 0;
+    return 10;
   }
 }
