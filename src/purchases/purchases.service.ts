@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { PurchaseEntity } from './purchase.entity';
 
@@ -10,6 +10,16 @@ export class PurchasesService {
     @InjectRepository(PurchaseEntity)
     private readonly purchaseRepo: Repository<PurchaseEntity>,
   ) {}
+
+  async findById(
+    id: number,
+    relations?: string[],
+  ): Promise<PurchaseEntity | undefined> {
+    return await this.purchaseRepo.findOne({
+      where: { id },
+      relations,
+    });
+  }
 
   async findBusinessPurchases(
     businessId: number,
@@ -26,11 +36,22 @@ export class PurchasesService {
     values: Record<string, any>,
     businessId: number,
   ): Promise<PurchaseEntity> {
-    const purchase = this.purchaseRepo.create({
+    const newPurchase = this.purchaseRepo.create({
       ...values,
       businessId,
     });
 
-    return await this.purchaseRepo.save(purchase);
+    const purchase = await this.purchaseRepo.save(newPurchase);
+
+    return await this.findById(purchase.id, ['bundle']);
+  }
+
+  async delete(id: number): Promise<DeleteResult> {
+    const purchase = await this.findById(id);
+
+    if (purchase.spentCredits != 0)
+      throw new BadRequestException('Unable to cancel purchase. Credits used.');
+
+    return await this.purchaseRepo.delete(id);
   }
 }

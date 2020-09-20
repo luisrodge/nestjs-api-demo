@@ -1,4 +1,4 @@
-import { Body, Get, Post } from '@nestjs/common';
+import { Body, Delete, Get, Param, Post } from '@nestjs/common';
 
 import { DtoValidationPipe } from '../core/pipes/dto-validation.pipe';
 import { ApiController } from '../core/decorators/api-controller.decorator';
@@ -35,5 +35,10 @@ export class PurchasesController {
       data,
     );
     return await this.purchasesService.create(dto, currentUser.businessId);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    return await this.purchasesService.delete(id);
   }
 }
