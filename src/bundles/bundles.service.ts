@@ -12,7 +12,7 @@ export class BundlesService {
   ) {}
 
   async findAll(): Promise<BundleEntity[]> {
-    return await this.bundleRepo.find({ order: { price: 'DESC' } });
+    return await this.bundleRepo.find({ order: { price: 'ASC' } });
   }
 
   async remainingCredits(id: number): Promise<number> {

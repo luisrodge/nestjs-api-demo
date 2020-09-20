@@ -32,6 +32,12 @@ export class PurchaseEntity {
   @Column({ nullable: false, default: 0 })
   spentCredits: number;
 
+  @Column({ nullable: false })
+  businessId: number;
+
+  @Column({ nullable: false })
+  bundleId: number;
+
   @Column({ nullable: true })
   expiresAt: Date;
 
