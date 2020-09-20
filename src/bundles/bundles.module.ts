@@ -3,12 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { BundleEntity } from './bundle.entity';
 import { BundlesService } from './bundles.service';
-import { BundlesController } from './bundles.controller';
+import { PurchasesModule } from '../purchases/purchases.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([BundleEntity])],
+  imports: [TypeOrmModule.forFeature([BundleEntity]), PurchasesModule],
   exports: [BundlesService],
   providers: [BundlesService],
-  controllers: [BundlesController],
 })
 export class BundlesModule {}
