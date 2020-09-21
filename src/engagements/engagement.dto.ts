@@ -20,6 +20,10 @@ export abstract class CrudEngagementDto {
   @IsOptional()
   @Type(() => Number)
   contactIds: number[];
+
+  @IsOptional()
+  @Type(() => Number)
+  bundleIds: number[];
 }
 
 export class CreateEngagementDto extends CrudEngagementDto {}
