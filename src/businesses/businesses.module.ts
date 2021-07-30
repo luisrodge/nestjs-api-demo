@@ -3,11 +3,12 @@ import { Module } from '@nestjs/common';
 
 import { BusinessEntity } from './business.entity';
 import { BusinessesService } from './businesses.service';
-import { BusinessesController } from './businesses.controller';
+import { BusinessController } from './businesses.controller';
+import { BundlesModule } from '../bundles/bundles.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([BusinessEntity])],
-  controllers: [BusinessesController],
+  imports: [TypeOrmModule.forFeature([BusinessEntity]), BundlesModule],
+  controllers: [BusinessController],
   exports: [BusinessesService],
   providers: [BusinessesService],
 })

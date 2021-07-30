@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult } from 'typeorm';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as csv from 'fast-csv';
 
 import { ContactEntity } from './contact.entity';
@@ -68,17 +68,18 @@ export class ContactsService {
   async import(filePath: string, businessId: number) {
     fs.createReadStream(filePath)
       .pipe(csv.parse({ headers: true }))
-      .on('error', error => console.error(error))
       .on('data', async row => {
-        const contact = {
-          name: row.Name,
-          email: row.Email,
-          phoneNumber: row.Phone,
-        };
-        await this.create(contact, businessId);
+        await this.create(
+          {
+            name: row.Name,
+            email: row.Email,
+            phoneNumber: row.Phone,
+          },
+          businessId,
+        );
       })
-      .on('end', () => {
-        fs.unlinkSync(filePath);
+      .on('end', async () => {
+        await fs.remove(filePath);
       });
   }
 

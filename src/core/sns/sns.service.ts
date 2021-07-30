@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { SNS } from 'aws-sdk';
 
 import { formatForPublish } from '../../utils/phone-number';
-import { DEFAULT_AWS_REGION } from '../../shared/constants';
+import { DEFAULT_AWS_REGION } from '../../utils/constants';
 
 const ACCESS_ENV_KEY_VARIABLE = 'ACCESS_KEY_ID';
 const SECRET_ENV_KEY_VARIABLE = 'SECRET_ACCESS_KEY';

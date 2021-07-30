@@ -6,11 +6,11 @@ import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { UserEntity } from '../users/user.entity';
 import { BusinessesService } from './businesses.service';
 
-@ApiController('/api/v1/businesses', ResultBusinessDto)
-export class BusinessesController {
+@ApiController('/api/v1/business', ResultBusinessDto)
+export class BusinessController {
   constructor(private businessesService: BusinessesService) {}
 
-  @Get('profile')
+  @Get()
   public async findOne(@CurrentUser() currentUser: UserEntity) {
     return await this.businessesService.findById(currentUser.businessId);
   }
